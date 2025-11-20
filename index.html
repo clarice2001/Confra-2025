@@ -4,25 +4,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>Sorteio – Família Oliveira</title>
 
 <style>
 body {
-    background: #f9f7e8;
-    color: #333;
+    background: linear-gradient(#fffbe9, #f7e7c1);
+    color: #3a2e14;
     text-align: center;
-    font-family: Arial, sans-serif;
+    font-family: 'Trebuchet MS', sans-serif;
     margin: 0;
     padding: 0;
 }
 
 .logo {
-    font-size: 34px;
+    font-size: 38px;
     font-weight: bold;
     margin-top: 25px;
-    color: #d4af37;
-    text-shadow: 0 0 10px #e6c768;
+    color: #d4b037;
+    text-shadow: 0 0 12px #f3d77c;
 }
 
 .fireworks {
@@ -31,54 +30,66 @@ body {
     height: 100%;
     top:0; left:0;
     pointer-events:none;
-    background-image: url('https://i.imgur.com/wQbYj1T.gif');
+    background-image: url('https://i.imgur.com/7VbZ4.gif');
     background-size: cover;
-    opacity: 0.35;
+    opacity: 0.25;
 }
 
 .container {
-    background: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.88);
     display: inline-block;
     padding: 25px;
     border-radius: 15px;
     margin-top: 40px;
-    width: 90%;
-    max-width: 360px;
+    width: 92%;
+    max-width: 380px;
+    box-shadow: 0 0 18px #e6d28a;
 }
 
 input {
     width: 95%;
-    padding: 12px;
-    font-size: 18px;
+    padding: 14px;
+    font-size: 19px;
     border-radius: 8px;
-    border: 1px solid #bbb;
+    border: 1px solid #bfa869;
 }
 
 button {
-    padding: 12px 25px;
-    font-size: 19px;
-    border-radius: 10px;
+    padding: 14px 28px;
+    font-size: 20px;
+    border-radius: 12px;
     border: none;
-    background: #d4af37;
-    color: #fff;
-    margin-top: 15px;
+    background: gold;
+    color: #4a3b00;
+    margin-top: 18px;
+    animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 8px gold; }
+    to   { box-shadow: 0 0 18px gold; }
 }
 
 #resultado {
-    margin-top: 20px;
-    font-size: 20px;
-    color: #000;
+    margin-top: 22px;
+    font-size: 22px;
+    color: #3a2e14;
 }
 </style>
 </head>
+
 <body>
+
+<audio autoplay loop>
+  <source src="https://www.dropbox.com/scl/fi/iqwz1z1p66n2e4g4f9c9t/ano_novo_soft.mp3?rlkey=8zj6bvx7s2q32y7g7nnyqjuew&dl=1" type="audio/mpeg">
+</audio>
 
 <div class="fireworks"></div>
 
-<div class="logo">Família Oliveira 🎉</div>
+<div class="logo">✨ Família Oliveira ✨</div>
 
 <div class="container">
-<h2 style="color:#444;">Sorteio 2025</h2>
+<h2 style="color:#574400;">Sorteio Elegante 2025</h2>
 
 <input id="nome" placeholder="Seu nome"><br><br>
 <input id="senha" type="password" placeholder="Crie uma senha"><br><br>
