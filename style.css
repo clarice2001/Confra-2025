@@ -1,78 +1,42 @@
-
-body{
-    margin:0;
-    background: linear-gradient(180deg, #ffffff, #eef1ff);
-    text-align:center;
-    font-family:'Poppins', sans-serif;
-    overflow-x:hidden;
+body {
+    margin: 0;
+    background: #fafafa;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
-/* container centralizado e responsivo */
-.container{
-    position:relative;
-    z-index:2;
-    padding-top:60px;
+.container {
+    margin-top: 80px;
 }
 
-/* textos grandes e alinhados para celular */
-.titulo{
-    font-size:8vw;
-    font-weight:700;
-    color:#333;
-}
-.sub{
-    font-size:5.8vw;
-    margin-top:-2vw;
-}
-.sub2{
-    font-size:4.8vw;
-    margin-top:2vw;
+h1, h2, h3 {
+    margin: 10px;
 }
 
-/* botões grandes para toque */
-.btn{
-    display:block;
-    margin:25px auto;
-    padding:18px 25px;
-    width:70%;
-    border-radius:18px;
-    background:#ffd700;
-    text-decoration:none;
-    color:#000;
-    font-weight:600;
-    font-size:5vw;
-    box-shadow:0 0 12px rgba(0,0,0,0.25);
-    transition:0.3s;
-}
-.btn:active{
-    transform:scale(0.97);
+.input {
+    display: block;
+    margin: 10px auto;
+    padding: 12px;
+    width: 80%;
+    font-size: 18px;
 }
 
-/* fogos adaptados */
-.fireworks{
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background:
-      radial-gradient(circle, rgba(255,215,0,0.75) 0%, transparent 70%) 20% 25%,
-      radial-gradient(circle, rgba(255,105,180,0.75) 0%, transparent 70%) 70% 35%,
-      radial-gradient(circle, rgba(0,191,255,0.75) 0%, transparent 70%) 40% 80%;
-    background-size:20vw 20vw;
-    background-repeat:no-repeat;
-    animation:fire 2.5s infinite ease-in-out;
-    opacity:0.5;
+.btn {
+    display: block;
+    margin: 15px auto;
+    background: #4a90e2;
+    color: white;
+    padding: 12px 20px;
+    width: 80%;
+    text-decoration: none;
+    font-size: 20px;
+    border-radius: 8px;
 }
 
-@keyframes fire{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.25);}
-    100%{transform:scale(1);}
-}
-
-/* ajustes tablet/desktop */
-@media (min-width:800px){
-    .titulo{font-size:48px;}
-    .sub{font-size:32px;}
-    .sub2{font-size:26px;}
-    .btn{font-size:22px; width:260px;}
+#fireworks {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+    background: transparent;
 }
