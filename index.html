@@ -3,42 +3,71 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Sorteio – Família Oliveira</title>
+
 <style>
 body {
-    background: #000;
-    color: #fff;
+    background: #f9f7e8;
+    color: #333;
     text-align: center;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
+
 .logo {
-    font-size: 32px;
+    font-size: 34px;
     font-weight: bold;
-    margin-top: 20px;
-    color: gold;
-    text-shadow: 0 0 10px gold;
+    margin-top: 25px;
+    color: #d4af37;
+    text-shadow: 0 0 10px #e6c768;
 }
+
 .fireworks {
     position: fixed;
     width: 100%;
     height: 100%;
     top:0; left:0;
     pointer-events:none;
-    background-image: url('https://i.imgur.com/7VbZ4.gif');
+    background-image: url('https://i.imgur.com/wQbYj1T.gif');
     background-size: cover;
-    opacity: 0.4;
+    opacity: 0.35;
 }
+
 .container {
-    background: rgba(0,0,0,0.6);
+    background: rgba(255,255,255,0.85);
     display: inline-block;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 25px;
+    border-radius: 15px;
     margin-top: 40px;
+    width: 90%;
+    max-width: 360px;
 }
-button {
-    padding: 10px 20px;
-    font-size: 17px;
+
+input {
+    width: 95%;
+    padding: 12px;
+    font-size: 18px;
     border-radius: 8px;
+    border: 1px solid #bbb;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 19px;
+    border-radius: 10px;
+    border: none;
+    background: #d4af37;
+    color: #fff;
+    margin-top: 15px;
+}
+
+#resultado {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #000;
 }
 </style>
 </head>
@@ -46,10 +75,10 @@ button {
 
 <div class="fireworks"></div>
 
-<div class="logo">Família Oliveira – Sorteio 2025 🎆</div>
+<div class="logo">Família Oliveira 🎉</div>
 
 <div class="container">
-<h2>Faça seu sorteio</h2>
+<h2 style="color:#444;">Sorteio 2025</h2>
 
 <input id="nome" placeholder="Seu nome"><br><br>
 <input id="senha" type="password" placeholder="Crie uma senha"><br><br>
@@ -97,6 +126,10 @@ const itens = [
 ];
 
 function sortear() {
+    if (itens.length === 0) {
+        document.getElementById("resultado").innerText = "Todos os itens já foram sorteados.";
+        return;
+    }
     const i = Math.floor(Math.random() * itens.length);
     const escolhido = itens.splice(i, 1)[0];
     document.getElementById("resultado").innerText = "Você tirou: " + escolhido;
