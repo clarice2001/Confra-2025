@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Sorteio - Família Oliveira</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:0;background:linear-gradient(135deg,#fff,#f7ead0);color:#333}
+.header{background:rgba(255,215,0,0.95);padding:24px;text-align:center;font-weight:700;color:#5a4a00}
+.container{max-width:700px;margin:28px auto;background:rgba(255,255,255,0.95);padding:22px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.12)}
+input,button,textarea{font-size:16px}
+input,textarea{width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid #ccc;box-sizing:border-box}
+button{background:gold;border:none;padding:12px 18px;border-radius:8px;cursor:pointer;font-weight:700}
+.result{margin-top:18px;font-size:18px;color:#5a4a00}
+.small{font-size:13px;color:#666;margin-top:6px}
+.canvas-wrap{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:-1}
+.footer{font-size:13px;color:#555;margin-top:16px;text-align:center}
+.copybtn{margin-right:8px;padding:8px 12px;border-radius:6px;background:#eee;border:1px solid #ddd}
+</style>
+</head>
+<body>
+<canvas id="fireworks"></canvas>
+<div class="header">Família Oliveira — Sorteio de Ano Novo</div>
+<div class="container">
+  <h2 style="text-align:center">✨ Sorteio de Itens da Ceia ✨</h2>
+  <p style="text-align:center" class="small">Cada participante digita seu nome e realiza o sorteio. Depois ele gera um **arquivo criptografado** (que só a organizadora consegue abrir) e envia para ela.</p>
+
+  <label>Senha de acesso ao sorteio (fornecida pela organização)</label>
+  <input id="accessPwd" type="password" placeholder="Senha de acesso (ex.: 2025FamOliveira)">
+
+  <label>Seu nome</label>
+  <input id="nome" type="text" placeholder="Seu nome">
+
+  <div style="text-align:center">
+    <button id="drawBtn">Sortear meu item</button>
+  </div>
+
+  <div class="result" id="resultado"></div>
+
+  <div style="margin-top:12px">
+    <label>Blob criptografado (envie apenas esse texto para a organizadora)</label>
+    <textarea id="blob" rows="4" readonly placeholder="Aqui aparecerá o texto criptografado para enviar à organizadora"></textarea>
+    <div style="margin-top:8px">
+      <button class="copybtn" id="copyBtn">Copiar</button>
+      <button id="mailBtn">Abrir e-mail com texto</button>
+    </div>
+    <p class="small">Observação: o site não salva nada. Os resultados só ficam visíveis para a organizadora que possuir a senha mestra.</p>
+  </div>
+
+  <div class="footer">Precisa que a organizadora receba os blobs? Peça para que ela abra a página <strong>/admin.html</strong> e cole os blobs lá para decifrar.</div>
+</div>
+
+<script>
+// Items list
+let itens = [
+"Arroz (Janta 31/12)","Arroz (Almoço 01/01)","Feijão tropeiro (Janta 31/12)",
+"Feijoada (Almoço 01/01)","Vinagrete e salada (Almoço 01/01)","Vinagrete e salada (Janta 31/12)",
+"Escondidinho à gosto - 15 poções (Janta 31/12)","Salpicão à gosto - 15 porções (Janta 31/12)",
+"Lasanha à gosto - 15 porções (Almoço 01/01)","Strogonoff - 15 porções (Almoço 01/01)",
+"Pudim - 15 porções (pós janta 31/12)","Bombom na travessa - 15 porções (pós janta 31/12)",
+"Pavê - 15 porções (pós almoço 01/01)","Mousse de maracujá- 15 porções (pós almoço 01/01)",
+"Pão (contribuição em dinheiro 20,00)","1 Café pó (servido pt manhã)","1 Café pó (servido pt tarde)",
+"1L Leite (servido parte manhã)","1L Leite (servido parte tarde)","1 Margarina 250g","1k Queijo",
+"15un Chimango (café da manhã)","15un Pão de queijo (café da tarde)","1 Bolo simples de padaria (café da manhã)",
+"1 Bolo simples de padaria (café da tarde)","1L Suco (café da manhã)","1L Suco (café da tarde)",
+"Chocolate em pó","Bolo de tapioca - 15 porções (café da manhã)","Cuscuz- 10 porções (café da manhã)",
+"Salada de frutas - 15 porções (café da tarde)","A - Champanhe/ espumante sem álcool","B - Champanhe/ espumante sem álcool"
+];
+
+// For demo, the access password expected (you can change before hosting)
+const ACCESS_PASSWORD = "2025FamOliveira"; // participants need this to draw
+
+// --- Fireworks simple background (keeps same as earlier) ---
+const canvas = document.getElementById('fireworks');
+const ctx = canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resize();window.addEventListener('resize',resize);
+function rand(a,b){return Math.random()*(b-a)+a;}
+let particles=[],fireworks=[];
+function Firework(){this.x=innerWidth/2;this.y=innerHeight;this.tx=rand(0,innerWidth);this.ty=rand(0,innerHeight/2);this.speed=rand(2,4);this.angle=Math.atan2(this.ty-this.y,this.tx-this.x);this.boom=false;}
+Firework.prototype.update=function(){if(!this.boom){this.x+=Math.cos(this.angle)*this.speed;this.y+=Math.sin(this.angle)*this.speed;if(Math.hypot(this.x-this.tx,this.y-this.ty)<6){this.boom=true;for(let i=0;i<30;i++)particles.push(new Particle(this.x,this.y));}}};
+Firework.prototype.draw=function(){ctx.fillStyle='gold';ctx.fillRect(this.x,this.y,2,2);};
+function Particle(x,y){this.x=x;this.y=y;this.speed=rand(1,5);this.angle=rand(0,Math.PI*2);this.alpha=1;}
+Particle.prototype.update=function(){this.x+=Math.cos(this.angle)*this.speed;this.y+=Math.sin(this.angle)*this.speed;this.alpha-=0.02;};
+Particle.prototype.draw=function(){ctx.globalAlpha=this.alpha;ctx.fillStyle='gold';ctx.fillRect(this.x,this.y,3,3);ctx.globalAlpha=1;};
+function loop(){ctx.clearRect(0,0,canvas.width,canvas.height);if(Math.random()<0.04)fireworks.push(new Firework());fireworks.forEach((f,i)=>{f.update();f.draw();if(f.boom)fireworks.splice(i,1);});particles.forEach((p,i)=>{p.update();p.draw();if(p.alpha<=0)particles.splice(i,1);});requestAnimationFrame(loop);}loop();
+// ----------------------------------------------------------
+
+// Utils for crypto: derive key with PBKDF2 and use AES-GCM
+async function deriveKey(password, salt) {
+  let enc = new TextEncoder();
+  let keyMaterial = await window.crypto.subtle.importKey("raw", enc.encode(password), {"name":"PBKDF2"}, false, ["deriveKey"]);
+  return window.crypto.subtle.deriveKey({"name":"PBKDF2","salt":salt,"iterations":250000,"hash":"SHA-256"}, keyMaterial, {"name":"AES-GCM","length":256}, false, ["encrypt","decrypt"]);
+}
+
+async function encryptText(password, plaintext) {
+  const enc = new TextEncoder();
+  const salt = window.crypto.getRandomValues(new Uint8Array(16));
+  const iv = window.crypto.getRandomValues(new Uint8Array(12));
+  const key = await deriveKey(password, salt);
+  const ct = await window.crypto.subtle.encrypt({"name":"AES-GCM","iv":iv}, key, enc.encode(plaintext));
+  // pack salt + iv + ct as base64
+  const combined = new Uint8Array(salt.byteLength + iv.byteLength + ct.byteLength);
+  combined.set(salt,0); combined.set(iv,salt.byteLength); combined.set(new Uint8Array(ct), salt.byteLength + iv.byteLength);
+  return btoa(String.fromCharCode(...combined));
+}
+
+async function decryptText(password, b64) {
+  try {
+    const combined = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    const salt = combined.slice(0,16);
+    const iv = combined.slice(16,28);
+    const ct = combined.slice(28);
+    const key = await deriveKey(password, salt);
+    const pt = await window.crypto.subtle.decrypt({"name":"AES-GCM","iv":iv}, key, ct);
+    return new TextDecoder().decode(pt);
+  } catch(e) {
+    throw new Error("Falha ao descriptografar: " + e.message);
+  }
+}
+
+// Draw logic
+document.getElementById('drawBtn').addEventListener('click', async ()=>{
+  const access = document.getElementById('accessPwd').value.trim();
+  const nome = document.getElementById('nome').value.trim();
+  if(access !== ACCESS_PASSWORD){alert('Senha de acesso inválida. Entre em contato com a organização.');return;}
+  if(!nome){alert('Digite seu nome.');return;}
+  if(itens.length === 0){document.getElementById('resultado').textContent='Todos os itens já foram sorteados.';return;}
+  const idx = Math.floor(Math.random() * itens.length);
+  const item = itens.splice(idx,1)[0];
+  const resultadoText = JSON.stringify({nome: nome, item: item, ts: new Date().toISOString()});
+  // Encrypt with the master password (organizer will provide Oliveira2025)
+  const encrypted = await encryptText("Oliveira2025", resultadoText);
+  document.getElementById('resultado').innerHTML = "🎉 " + nome + ", você ficou responsável por:<br><br>✨ " + item + " ✨";
+  document.getElementById('blob').value = encrypted;
+});
+
+// Copy and mail buttons
+document.getElementById('copyBtn').addEventListener('click', ()=>{
+  const b = document.getElementById('blob').value;
+  if(!b){alert('Nenhum blob para copiar. Faça o sorteio primeiro.');return;}
+  navigator.clipboard.writeText(b).then(()=>alert('Texto criptografado copiado para a área de transferência.'));
+});
+document.getElementById('mailBtn').addEventListener('click', ()=>{
+  const b = document.getElementById('blob').value;
+  if(!b){alert('Nenhum blob para enviar. Faça o sorteio primeiro.');return;}
+  const subject = encodeURIComponent('Meu resultado do sorteio - Família Oliveira');
+  const body = encodeURIComponent('Olá organizadora,\n\nSegue meu resultado criptografado (cole onde combinado na administração):\n\n' + b);
+  window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+});
+</script>
+</body>
+</html>
