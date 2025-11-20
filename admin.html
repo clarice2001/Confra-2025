@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>Painel da Organizadora</title>
 
 <style>
@@ -16,7 +15,7 @@ body {
 }
 
 .container {
-    margin-top: 45px;
+    margin-top: 25px;
     padding: 25px;
     background: #ffffffdd;
     border-radius: 12px;
@@ -31,7 +30,71 @@ body {
 <body>
 <div class="container">
 <h2>Painel da Organizadora</h2>
-<p>Aqui você pode anotar manualmente os sorteados.</p>
+
+<h3>Lista de participantes</h3>
+<ul id="lista_participantes"></ul>
+
+<h3>Checklist dos itens</h3>
+<ul id="lista_itens"></ul>
+
 </div>
+
+<script>
+let itens_default = [
+"Arroz (Janta 31/12)",
+"Arroz (Almoço 01/01)",
+"Feijão tropeiro (Janta 31/12)",
+"Feijoada (Almoço 01/01)",
+"Vinagrete e salada (Almoço 01/01)",
+"Vinagrete e salada (Janta 31/12)",
+"Escondidinho - 15 porções",
+"Salpicão - 15 porções",
+"Lasanha - 15 porções",
+"Strogonoff - 15 porções",
+"Pudim - 15 porções",
+"Bombom na travessa - 15 porções",
+"Pavê - 15 porções",
+"Mousse de maracujá - 15 porções",
+"Pão (20 reais)",
+"Café pó manhã",
+"Café pó tarde",
+"Leite manhã",
+"Leite tarde",
+"Margarina",
+"Queijo 1kg",
+"Chimango 15 unidades",
+"Pão de queijo 15 unidades",
+"Bolo manhã",
+"Bolo tarde",
+"Suco manhã",
+"Suco tarde",
+"Chocolate em pó",
+"Bolo de tapioca",
+"Cuscuz",
+"Salada de frutas",
+"Champanhe A",
+"Champanhe B"
+];
+
+let participantes = JSON.parse(localStorage.getItem("participantes") || "[]");
+
+let usados = participantes.map(p => p.item);
+
+let listaP = document.getElementById("lista_participantes");
+participantes.forEach(p => {
+    let li = document.createElement("li");
+    li.innerText = p.nome + " — " + p.item;
+    listaP.appendChild(li);
+});
+
+let listaI = document.getElementById("lista_itens");
+itens_default.forEach(item => {
+    let li = document.createElement("li");
+    let check = usados.includes(item) ? "✔️" : "❌";
+    li.innerText = check + " " + item;
+    listaI.appendChild(li);
+});
+</script>
+
 </body>
 </html>
