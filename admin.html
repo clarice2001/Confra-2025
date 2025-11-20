@@ -5,94 +5,66 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Painel da Organizadora</title>
-
 <style>
-body {
-    background: linear-gradient(#fffbe9, #f7e7c1);
-    color: #3a2e14;
-    text-align: center;
-    font-family: 'Trebuchet MS', sans-serif;
-}
-
+body { background:#fffbe9; text-align:center; font-family:'Trebuchet MS'; }
 .container {
-    margin-top: 25px;
-    padding: 25px;
-    background: #ffffffdd;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 420px;
-    display: inline-block;
-    box-shadow: 0 0 18px #e6d28a;
+    margin-top:22px; padding:20px; background:white;
+    border-radius:12px; width:90%; max-width:420px;
+    display:inline-block; box-shadow:0 0 18px #e6d28a;
 }
+li { text-align:left; margin:6px 0; }
 </style>
 </head>
-
 <body>
+
 <div class="container">
 <h2>Painel da Organizadora</h2>
 
-<h3>Lista de participantes</h3>
+<h3>Participantes</h3>
 <ul id="lista_participantes"></ul>
 
-<h3>Checklist dos itens</h3>
+<h3>Senhas (somente organizadora)</h3>
+<ul id="lista_senhas"></ul>
+
+<h3>Checklist</h3>
 <ul id="lista_itens"></ul>
 
 </div>
 
 <script>
 let itens_default = [
-"Arroz (Janta 31/12)",
-"Arroz (Almoço 01/01)",
-"Feijão tropeiro (Janta 31/12)",
-"Feijoada (Almoço 01/01)",
-"Vinagrete e salada (Almoço 01/01)",
-"Vinagrete e salada (Janta 31/12)",
-"Escondidinho - 15 porções",
-"Salpicão - 15 porções",
-"Lasanha - 15 porções",
-"Strogonoff - 15 porções",
-"Pudim - 15 porções",
-"Bombom na travessa - 15 porções",
-"Pavê - 15 porções",
-"Mousse de maracujá - 15 porções",
-"Pão (20 reais)",
-"Café pó manhã",
-"Café pó tarde",
-"Leite manhã",
-"Leite tarde",
-"Margarina",
-"Queijo 1kg",
-"Chimango 15 unidades",
-"Pão de queijo 15 unidades",
-"Bolo manhã",
-"Bolo tarde",
-"Suco manhã",
-"Suco tarde",
-"Chocolate em pó",
-"Bolo de tapioca",
-"Cuscuz",
-"Salada de frutas",
-"Champanhe A",
-"Champanhe B"
+"Arroz (Janta 31/12)","Arroz (Almoço 01/01)","Feijão tropeiro (Janta 31/12)",
+"Feijoada (Almoço 01/01)","Vinagrete e salada (Almoço 01/01)","Vinagrete e salada (Janta 31/12)",
+"Escondidinho - 15 porções","Salpicão - 15 porções","Lasanha - 15 porções",
+"Strogonoff - 15 porções","Pudim - 15 porções","Bombom na travessa - 15 porções",
+"Pavê - 15 porções","Mousse de maracujá - 15 porções","Pão (20 reais)",
+"Café pó manhã","Café pó tarde","Leite manhã","Leite tarde","Margarina",
+"Queijo 1kg","Chimango 15 unidades","Pão de queijo 15 unidades","Bolo manhã",
+"Bolo tarde","Suco manhã","Suco tarde","Chocolate em pó","Bolo de tapioca",
+"Cuscuz","Salada de frutas","Champanhe A","Champanhe B"
 ];
 
 let participantes = JSON.parse(localStorage.getItem("participantes") || "[]");
-
 let usados = participantes.map(p => p.item);
 
-let listaP = document.getElementById("lista_participantes");
-participantes.forEach(p => {
+let LP = document.getElementById("lista_participantes");
+let LS = document.getElementById("lista_senhas");
+let LI = document.getElementById("lista_itens");
+
+participantes.forEach(p=>{
     let li = document.createElement("li");
     li.innerText = p.nome + " — " + p.item;
-    listaP.appendChild(li);
+    LP.appendChild(li);
+
+    let li2 = document.createElement("li");
+    li2.innerText = p.nome + " — Senha: " + p.senha;
+    LS.appendChild(li2);
 });
 
-let listaI = document.getElementById("lista_itens");
-itens_default.forEach(item => {
+itens_default.forEach(item=>{
     let li = document.createElement("li");
-    let check = usados.includes(item) ? "✔️" : "❌";
-    li.innerText = check + " " + item;
-    listaI.appendChild(li);
+    li.innerText = (usados.includes(item)?"✔️":"❌") + " " + item;
+    LI.appendChild(li);
 });
 </script>
 

@@ -4,173 +4,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sorteios de Pratos 2025 – Família Oliveira</title>
-
+<title>Sorteios de Pratos 2025</title>
 <style>
 body {
     background: linear-gradient(#fffbe9, #f7e7c1);
-    color: #3a2e14;
-    text-align: center;
     font-family: 'Trebuchet MS', sans-serif;
-    margin: 0;
-    padding: 0;
+    text-align:center;
 }
-
-/* Logo */
-.logo {
-    font-size: 38px;
-    font-weight: bold;
-    margin-top: 25px;
-    color: #d4b037;
-    text-shadow: 0 0 12px #f3d77c;
-}
-
-/* Fireworks stronger */
-.fireworks {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top:0; left:0;
-    pointer-events:none;
-    background-image: url('https://i.imgur.com/w1XMb.gif');
-    background-size: cover;
-    opacity: 0.55;
-}
-
 .container {
-    background: rgba(255,255,255,0.90);
-    display: inline-block;
+    margin-top: 25px;
     padding: 25px;
-    border-radius: 15px;
-    margin-top: 40px;
-    width: 92%;
-    max-width: 380px;
-    box-shadow: 0 0 18px #e6d28a;
+    background: #ffffffdd;
+    border-radius: 12px;
+    width:90%;
+    max-width:380px;
+    display:inline-block;
+    box-shadow:0 0 18px #e6d28a;
 }
-
-input {
-    width: 95%;
-    padding: 14px;
-    font-size: 19px;
-    border-radius: 8px;
-    border: 1px solid #bfa869;
-}
-
 button {
     padding: 14px 28px;
-    font-size: 20px;
-    border-radius: 12px;
-    border: none;
-    background: gold;
-    color: #4a3b00;
-    margin-top: 18px;
+    font-size: 18px;
+    border:none;
+    border-radius:10px;
+    background:gold;
     animation: glow 1s infinite alternate;
 }
-
 @keyframes glow {
-    from { box-shadow: 0 0 8px gold; }
-    to   { box-shadow: 0 0 18px gold; }
+    from{box-shadow:0 0 8px gold;}
+    to{box-shadow:0 0 18px gold;}
 }
-
-#resultado {
-    margin-top: 22px;
-    font-size: 22px;
-    color: #3a2e14;
+input {
+    width:95%;
+    padding:12px;
+    font-size:16px;
+    border-radius:8px;
+    border:1px solid #bfa869;
 }
+#resultado { margin-top:15px; font-size:18px; }
 </style>
 </head>
-
 <body>
 
-<audio autoplay loop>
-  <source src="https://www.dropbox.com/scl/fi/iqwz1z1p66n2e4g4f9c9t/ano_novo_soft.mp3?rlkey=8zj6bvx7s2q32y7g7nnyqjuew&dl=1" type="audio/mpeg">
-</audio>
-
-<div class="fireworks"></div>
-
-<div class="logo">✨ Família Oliveira ✨</div>
-
 <div class="container">
-<h2 style="color:#574400;">Sorteios de Pratos 2025</h2>
+<h2>Sorteios de Pratos 2025</h2>
 
 <input id="nome" placeholder="Seu nome"><br><br>
-<input id="senha" type="password" placeholder="Crie uma senha"><br><br>
+<input id="senha" type="password" placeholder="Sua senha"><br><br>
 
-<button onclick="sortear()">Sortear</button>
+<button onclick="entrar()">Entrar / Conferir</button>
+
+<div id="caixa_sorteio" style="display:none;">
+    <button onclick="sortear()">Sortear prato</button>
+</div>
 
 <p id="resultado"></p>
 </div>
 
 <script>
-/* Items stored in localStorage for no repetition */
 let itens_default = [
-"Arroz (Janta 31/12)",
-"Arroz (Almoço 01/01)",
-"Feijão tropeiro (Janta 31/12)",
-"Feijoada (Almoço 01/01)",
-"Vinagrete e salada (Almoço 01/01)",
-"Vinagrete e salada (Janta 31/12)",
-"Escondidinho - 15 porções",
-"Salpicão - 15 porções",
-"Lasanha - 15 porções",
-"Strogonoff - 15 porções",
-"Pudim - 15 porções",
-"Bombom na travessa - 15 porções",
-"Pavê - 15 porções",
-"Mousse de maracujá - 15 porções",
-"Pão (20 reais)",
-"Café pó manhã",
-"Café pó tarde",
-"Leite manhã",
-"Leite tarde",
-"Margarina",
-"Queijo 1kg",
-"Chimango 15 unidades",
-"Pão de queijo 15 unidades",
-"Bolo manhã",
-"Bolo tarde",
-"Suco manhã",
-"Suco tarde",
-"Chocolate em pó",
-"Bolo de tapioca",
-"Cuscuz",
-"Salada de frutas",
-"Champanhe A",
-"Champanhe B"
+"Arroz (Janta 31/12)","Arroz (Almoço 01/01)","Feijão tropeiro (Janta 31/12)",
+"Feijoada (Almoço 01/01)","Vinagrete e salada (Almoço 01/01)","Vinagrete e salada (Janta 31/12)",
+"Escondidinho - 15 porções","Salpicão - 15 porções","Lasanha - 15 porções",
+"Strogonoff - 15 porções","Pudim - 15 porções","Bombom na travessa - 15 porções",
+"Pavê - 15 porções","Mousse de maracujá - 15 porções","Pão (20 reais)",
+"Café pó manhã","Café pó tarde","Leite manhã","Leite tarde","Margarina",
+"Queijo 1kg","Chimango 15 unidades","Pão de queijo 15 unidades","Bolo manhã",
+"Bolo tarde","Suco manhã","Suco tarde","Chocolate em pó","Bolo de tapioca",
+"Cuscuz","Salada de frutas","Champanhe A","Champanhe B"
 ];
 
-/* Load state */
-let itens = JSON.parse(localStorage.getItem("itens_restantes") || "null");
-if (!itens) {
-    itens = [...itens_default];
-    localStorage.setItem("itens_restantes", JSON.stringify(itens));
+let itens_restantes = JSON.parse(localStorage.getItem("itens_restantes") || "null");
+if (!itens_restantes) {
+    itens_restantes = [...itens_default];
+    localStorage.setItem("itens_restantes", JSON.stringify(itens_restantes));
 }
 
 let participantes = JSON.parse(localStorage.getItem("participantes") || "[]");
 
-function sortear() {
+function entrar() {
     let nome = document.getElementById("nome").value.trim();
     let senha = document.getElementById("senha").value.trim();
-
     if (!nome || !senha) {
         document.getElementById("resultado").innerText = "Preencha nome e senha.";
         return;
     }
 
-    if (itens.length === 0) {
-        document.getElementById("resultado").innerText = "Todos os itens já foram sorteados.";
+    let existente = participantes.find(p => p.nome===nome);
+
+    if (existente) {
+        if (existente.senha !== senha) {
+            document.getElementById("resultado").innerText = "Senha incorreta.";
+            return;
+        }
+        document.getElementById("resultado").innerText = "Você já sorteou: " + existente.item;
+        document.getElementById("caixa_sorteio").style.display = "none";
         return;
     }
 
-    const i = Math.floor(Math.random() * itens.length);
-    const escolhido = itens.splice(i, 1)[0];
+    // Novo usuário → pode sortear
+    document.getElementById("resultado").innerText = "Você pode sortear.";
+    document.getElementById("caixa_sorteio").style.display = "block";
+}
 
-    participantes.push({nome, senha, item: escolhido});
+function sortear() {
+    let nome = document.getElementById("nome").value.trim();
+    let senha = document.getElementById("senha").value.trim();
 
-    localStorage.setItem("itens_restantes", JSON.stringify(itens));
+    if (participantes.find(p => p.nome===nome)) {
+        document.getElementById("resultado").innerText = "Você já sorteou antes.";
+        return;
+    }
+
+    if (itens_restantes.length === 0) {
+        document.getElementById("resultado").innerText = "Todos os itens acabaram.";
+        return;
+    }
+
+    let i = Math.floor(Math.random() * itens_restantes.length);
+    let escolhido = itens_restantes.splice(i,1)[0];
+
+    participantes.push({nome, senha, item:escolhido});
+
+    localStorage.setItem("itens_restantes", JSON.stringify(itens_restantes));
     localStorage.setItem("participantes", JSON.stringify(participantes));
 
-    document.getElementById("resultado").innerText = "Você tirou: " + escolhido;
+    document.getElementById("resultado").innerText = "Seu prato: " + escolhido;
+    document.getElementById("caixa_sorteio").style.display = "none";
 }
 </script>
 
