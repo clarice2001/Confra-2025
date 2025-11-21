@@ -1,16 +1,11 @@
 
-:root{--bg:#fffdf5;--card:#ffffff;--gold:#d4af37;--text:#2f230f}
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,var(--bg),#f7e7c1);color:var(--text);-webkit-font-smoothing:antialiased;text-align:center}
-.fw{position:fixed;inset:0;pointer-events:none;z-index:0}
-.wrap{position:relative;z-index:2;max-width:420px;margin:30px auto;padding:18px}
-.logo{font-size:28px;color:var(--gold);font-weight:800;margin-bottom:6px}
-.subtitle{font-size:16px;margin-top:0;color:#6a5a3a}
-.card{position:relative;z-index:2;max-width:420px;margin:20px auto;padding:18px;background:var(--card);border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,0.08)}
-input{width:90%;padding:12px;margin:8px auto;border-radius:10px;border:1px solid #e6d9b0;font-size:16px}
-.bigbtn{display:block;margin:12px auto;padding:14px 18px;background:var(--gold);color:#2f230f;border-radius:12px;text-decoration:none;font-weight:700;width:85%;font-size:18px;border:none;cursor:pointer}
+:root{--bg:#fffdf5;--gold:#d4af37;--text:#2f230f}
+body{margin:0;font-family:Arial;background:linear-gradient(180deg,var(--bg),#f7e7c1);color:var(--text);text-align:center}
+.logoimg{max-width:140px;margin:12px auto;display:block;border-radius:10px}
+.card{max-width:420px;margin:18px auto;padding:16px;background:white;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.06)}
+input{width:90%;padding:10px;margin:8px auto;border-radius:8px;border:1px solid #e6d9b0;display:block}
+.bigbtn{display:block;margin:10px auto;padding:12px;background:var(--gold);border-radius:10px;border:none;font-weight:700;width:85%}
 .bigbtn.outline{background:transparent;border:2px solid var(--gold)}
-.resultado{margin-top:12px;font-weight:700}
-.small{font-size:13px;color:#6a5a3a}
-.list{list-style:none;padding-left:0;text-align:left;max-width:600px;margin:0 auto}
-.list li{padding:6px 8px;border-bottom:1px solid #f0e7c8}
+.list{list-style:none;padding:0;text-align:left;max-width:600px;margin:10px auto}
+.list li{padding:6px;border-bottom:1px solid #f0e7c8}
+.fw{position:fixed;inset:0;pointer-events:none;z-index:0}
