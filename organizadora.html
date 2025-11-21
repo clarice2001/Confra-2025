@@ -3,17 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <title>Painel da Organizadora</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
+<script src="fireworks.js" defer></script>
 <script src="script.js" defer></script>
 </head>
 <body>
+<canvas id="fireworks"></canvas>
+
+<div class="container">
 <h2>Painel da Organizadora</h2>
 
-<h3>Participantes e seus pratos:</h3>
-<ul id="lista" class="list"></ul>
+<h3>Lista completa de itens:</h3>
+<ul id="itensTodos" class="list"></ul>
 
-<h3>Itens restantes:</h3>
-<ul id="restantes" class="list"></ul>
+<h3>Itens que já saíram:</h3>
+<ul id="itensSaidos" class="list"></ul>
+
+<h3>Participantes:</h3>
+<ul id="listaParticipantes" class="list"></ul>
+</div>
 
 </body>
 </html>

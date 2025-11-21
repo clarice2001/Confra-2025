@@ -1,3 +1,4 @@
+
 let itensDefault=[
 "Arroz (Janta 31/12)","Arroz (Almoço 01/01)","Feijão tropeiro (Janta 31/12)","Feijoada (Almoço 01/01)",
 "Vinagrete e salada (Almoço 01/01)","Vinagrete e salada (Janta 31/12)","Escondidinho - 15 porções",
@@ -40,25 +41,35 @@ function sortear(){
 }
 
 window.onload=()=>{
- let lista=document.getElementById('lista');
- let restantes=document.getElementById('restantes');
+ let todos=document.getElementById('itensTodos');
+ let saidos=document.getElementById('itensSaidos');
+ let lista=document.getElementById('listaParticipantes');
 
  let registro=JSON.parse(localStorage.getItem('participantes')||'[]');
  let itens=getItens();
+ let usados = itensDefault.filter(i => !itens.includes(i));
+
+ if(todos){
+    itensDefault.forEach(i=>{
+        let li=document.createElement("li");
+        li.textContent=i;
+        todos.appendChild(li);
+    });
+ }
+
+ if(saidos){
+    usados.forEach(i=>{
+        let li=document.createElement("li");
+        li.textContent=i;
+        saidos.appendChild(li);
+    });
+ }
 
  if(lista){
     registro.forEach(p=>{
         let li=document.createElement("li");
-        li.textContent=p.nome+" → "+p.item;
+        li.textContent=p.nome+" (senha: "+p.senha+") → "+p.item;
         lista.appendChild(li);
-    });
- }
-
- if(restantes){
-    itens.forEach(i=>{
-        let li=document.createElement("li");
-        li.textContent=i;
-        restantes.appendChild(li);
     });
  }
 }
