@@ -1,4 +1,4 @@
-let itens=[
+let itensDefault=[
 "Arroz (Janta 31/12)","Arroz (Almoço 01/01)","Feijão tropeiro (Janta 31/12)","Feijoada (Almoço 01/01)",
 "Vinagrete e salada (Almoço 01/01)","Vinagrete e salada (Janta 31/12)","Escondidinho - 15 porções",
 "Salpicão - 15 porções","Lasanha - 15 porções","Strogonoff - 15 porções","Pudim - 15 porções",
@@ -6,6 +6,14 @@ let itens=[
 "Margarina","Queijo 1kg","Chimango 15 unidades","Pão de queijo 15 unidades","Bolo manhã",
 "Bolo tarde","Suco tarde","Chocolate em pó","Bolo de tapioca","Cuscuz","Champanhe A","Champanhe B"
 ];
+
+function getItens(){
+  return JSON.parse(localStorage.getItem('itens_restantes')||'null') || [...itensDefault];
+}
+
+function saveItens(list){
+  localStorage.setItem('itens_restantes',JSON.stringify(list));
+}
 
 function sortear(){
  let nome=document.getElementById('nome').value;
@@ -19,24 +27,38 @@ function sortear(){
     return;
  }
 
+ let itens=getItens();
  let indice=Math.floor(Math.random()*itens.length);
  let item=itens.splice(indice,1)[0];
 
  registro.push({nome,senha,item});
+
  localStorage.setItem('participantes',JSON.stringify(registro));
- localStorage.setItem('itens_restantes',JSON.stringify(itens));
+ saveItens(itens);
 
  document.getElementById("resultado").innerText="Você recebeu: "+item;
 }
 
 window.onload=()=>{
  let lista=document.getElementById('lista');
+ let restantes=document.getElementById('restantes');
+
+ let registro=JSON.parse(localStorage.getItem('participantes')||'[]');
+ let itens=getItens();
+
  if(lista){
-    let registro=JSON.parse(localStorage.getItem('participantes')||'[]');
     registro.forEach(p=>{
-        let li=document.createElement('li');
+        let li=document.createElement("li");
         li.textContent=p.nome+" → "+p.item;
         lista.appendChild(li);
+    });
+ }
+
+ if(restantes){
+    itens.forEach(i=>{
+        let li=document.createElement("li");
+        li.textContent=i;
+        restantes.appendChild(li);
     });
  }
 }
