@@ -1,26 +1,9 @@
 
-const canvas=document.getElementById("fireworks");
-if(canvas){
- const ctx=canvas.getContext("2d");
- canvas.width=innerWidth;
- canvas.height=innerHeight;
-
- function boom(){
-  const x=Math.random()*canvas.width;
-  const y=Math.random()*canvas.height*0.5;
-  const radius=2+Math.random()*3;
-  for(let i=0;i<25;i++){
-    setTimeout(()=>{
-     ctx.beginPath();
-     ctx.arc(
-       x+Math.cos(i*2*Math.PI/25)*(20+Math.random()*40),
-       y+Math.sin(i*2*Math.PI/25)*(20+Math.random()*40),
-       radius,0,Math.PI*2
-     );
-     ctx.fillStyle="rgba(255,150,0,0.8)";
-     ctx.fill();
-    },i*20);
-  }
- }
- setInterval(boom,800);
+const c = document.getElementById('fw');
+if(c){
+  const ctx = c.getContext('2d');
+  function resize(){ c.width = innerWidth; c.height = innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  function boom(){ const x = Math.random()*c.width, y = Math.random()*c.height*0.45; for(let i=0;i<20;i++){ setTimeout(function(){ ctx.beginPath(); ctx.arc(x+Math.cos(i*2*Math.PI/20)*(30+Math.random()*50), y+Math.sin(i*2*Math.PI/20)*(30+Math.random()*50), 3+Math.random()*4,0,Math.PI*2); ctx.fillStyle=['rgba(212,175,55,0.95)','rgba(255,140,0,0.9)','rgba(255,105,180,0.85)'][Math.floor(Math.random()*3)]; ctx.fill(); }, i*20); } }
+  setInterval(boom, 900);
 }
