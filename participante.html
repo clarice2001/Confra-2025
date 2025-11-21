@@ -1,2 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Participante</title>
+<style>
+body {
+  margin:0; padding:0;
+  background:black;
+  color:white;
+  font-family: Arial, sans-serif;
+  text-align:center;
+  overflow:hidden;
+}
+h1 { margin-top:40px; font-size:32px; color:gold; }
+.firework {
+  position:absolute; width:5px; height:5px; background:white; border-radius:50%;
+  animation: explode 1.5s infinite;
+}
+@keyframes explode {
+  0% { transform:scale(1); opacity:1; }
+  100% { transform:scale(20); opacity:0; }
+}
+</style>
+</head>
+<body>
 
-<html><body><h1>Página Participante</h1></body></html>
+<div class="firework" style="top:20%; left:30%; animation-delay:0s;"></div>
+<div class="firework" style="top:60%; left:50%; animation-delay:0.4s;"></div>
+<div class="firework" style="top:40%; left:70%; animation-delay:0.8s;"></div>
+
+<h1>Confra Família 2025</h1>
+<h2>Participante</h2>
+<p>Sorteio ficará disponível após ativar Firebase.</p>
+<button onclick="syncData()">Testar Sincronização</button>
+
+<script>
+function syncData(){ console.log("Firebase placeholder sync."); }
+</script>
+
+</body>
+</html>
