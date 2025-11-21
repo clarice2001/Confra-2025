@@ -1,76 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Participante — Sorteio</title>
+<head>
+<meta charset="UTF-8">
+<title>Participante</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
+<script src="fireworks.js" defer></script>
+<script src="script.js" defer></script>
 </head>
 <body>
-<canvas id="fw" class="fw" aria-hidden="true"></canvas>
-<div class="card">
-  <div class="logo">Família Oliveira</div>
-  <h2>Sorteio de Pratos 2025</h2>
+<canvas id="fireworks"></canvas>
 
-  <label>Senha de acesso (fornecida)</label>
-  <input id="access" placeholder="Senha de acesso (ex: Oliveira2025)" autocomplete="off"/>
-
-  <label>Seu nome</label>
-  <input id="nome" placeholder="Ex.: Maria Silva" autocomplete="name"/>
-
-  <label>Crie uma senha pessoal</label>
-  <input id="userpwd" type="password" placeholder="Senha só sua" autocomplete="new-password"/>
-
-  <button id="btnDraw" class="bigbtn">Sortear (apenas 1 vez)</button>
-  <button id="btnCheck" class="bigbtn outline">Consultar resultado</button>
-
-  <p id="resultado" class="resultado" aria-live="polite"></p>
-  <p class="small">Funciona localmente (cada aparelho) ou com Firebase (para atualização central). Se quiser sincronizar entre aparelhos, eu te ajudo a ativar o Firebase.</p>
+<div class="container">
+<h2>Área do Participante</h2>
+<input id="nome" class="input" placeholder="Seu nome">
+<input id="senha" class="input" placeholder="Sua senha">
+<button class="btn" onclick="sortear()">Sortear</button>
+<p id="resultado"></p>
 </div>
 
-<script>
-// ITEMS_DEFAULT placeholder will be replaced
-const ITEMS_DEFAULT = ["Arroz (Janta 31/12)", "Arroz (Almoço 01/01)", "Feijão tropeiro (Janta 31/12)", "Feijoada (Almoço 01/01)", "Vinagrete e salada (Almoço 01/01)", "Vinagrete e salada (Janta 31/12)", "Escondidinho à gosto - 15 poções (Janta 31/12)", "Salpicão à gosto - 15 porções (Janta 31/12)", "Lasanha à gosto - 15 porções (Almoço 01/01)", "Strogonoff - 15 porções (Almoço 01/01)", "Pudim - 15 porções (pós janta 31/12)", "Bombom na travessa - 15 porções (pós janta 31/12)", "Pavê - 15 porções (pós almoço 01/01)", "Mousse de maracujá- 15 porções (pós almoço 01/01)", "Pão (contribuição em dinheiro 20,00)", "1 Café pó (servido pt manhã)", "1 Café pó (servido pt tarde)", "1L Leite (servido parte manhã)", "1L Leite (servido parte tarde)", "1 Margarina 250g", "1k Queijo", "15un Chimango (café da manhã)", "15un Pão de queijo (café da tarde)", "1 Bolo simples de padaria (café da manhã)", "1 Bolo simples de padaria (café da tarde)", "1L Suco (café da manhã)", "1L Suco (café da tarde)", "Chocolate em pó", "Bolo de tapioca - 15 porções (café da manhã)", "Cuscuz- 10 porções (café da manhã)", "Salada de frutas - 15 porções (café da tarde)", "A - Champanhe/ espumante sem álcool", "B - Champanhe/ espumante sem álcool"];
-
-// fireworks (simple)
-(function(){const c=document.getElementById('fw'); if(!c) return; const ctx=c.getContext('2d'); function resize(){c.width=innerWidth; c.height=innerHeight;} resize(); window.addEventListener('resize', resize); function boom(){const x=Math.random()*c.width,y=Math.random()*c.height*0.5; for(let i=0;i<18;i++){ setTimeout(function(){ ctx.beginPath(); ctx.arc(x+Math.cos(i*2*Math.PI/18)*(30+Math.random()*60), y+Math.sin(i*2*Math.PI/18)*(30+Math.random()*60), 3+Math.random()*3,0,Math.PI*2); ctx.fillStyle=['rgba(212,175,55,0.95)','rgba(255,140,0,0.9)','rgba(255,105,180,0.85)'][Math.floor(Math.random()*3)]; ctx.fill(); }, i*25);} } setInterval(boom,900); })();
-
-// local storage helpers
-function loadItems(){ return JSON.parse(localStorage.getItem('itens_restantes')||'null') || ITEMS_DEFAULT.slice(); }
-function saveItems(arr){ localStorage.setItem('itens_restantes', JSON.stringify(arr)); }
-function loadParticipants(){ return JSON.parse(localStorage.getItem('participants')||'[]'); }
-function saveParticipants(p){ localStorage.setItem('participants', JSON.stringify(p)); }
-
-function show(msg){ document.getElementById('resultado').innerText = msg; }
-
-// draw logic: one draw per nome+senha (client-side)
-document.getElementById('btnDraw').addEventListener('click', function(){ 
-  var access = document.getElementById('access').value.trim();
-  var nome = document.getElementById('nome').value.trim();
-  var userpwd = document.getElementById('userpwd').value.trim();
-  if(!access||!nome||!userpwd){ show('Preencha todos os campos.'); return; }
-
-  // local-only mode
-  var partes = loadParticipants();
-  var found = partes.find(function(p){ return p.nome===nome && p.senha===userpwd; });
-  if(found){ show('Você já sorteou: ' + found.item); return; }
-  var itens = loadItems();
-  if(itens.length===0){ show('Nenhum item restante.'); return; }
-  var idx = Math.floor(Math.random()*itens.length);
-  var chosen = itens.splice(idx,1)[0];
-  partes.push({nome:nome, senha:userpwd, item:chosen, ts:new Date().toISOString()});
-  saveParticipants(partes);
-  saveItems(itens);
-  show('🎉 '+nome+', seu prato: '+chosen + ' (registro salvo localmente).');
-});
-
-document.getElementById('btnCheck').addEventListener('click', function(){ 
-  var nome = document.getElementById('nome').value.trim();
-  var userpwd = document.getElementById('userpwd').value.trim();
-  if(!nome||!userpwd){ show('Preencha nome e senha para consultar.'); return; }
-  var partes = loadParticipants();
-  var found = partes.find(function(p){ return p.nome===nome && p.senha===userpwd; });
-  if(found) show('Seu prato: '+found.item);
-  else show('Nenhum resultado local. Se sortearam em outro aparelho, peça à organizadora para consultar o painel.');
-});
-</script>
 </body>
 </html>
