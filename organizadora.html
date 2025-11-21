@@ -1,13 +1,50 @@
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Organizadora</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Painel da Organizadora</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body style="font-family:Arial;text-align:center;padding-top:40px;background:#fffdf5;">
-<h1>Painel da Organizadora</h1>
-<p>(Aqui entra exatamente o conteúdo da versão que você aprovou)</p>
+<body>
+<canvas id="fw" class="fw" aria-hidden="true"></canvas>
+<div class="card">
+  <div class="logo">Família Oliveira — Painel</div>
+  <h3>Participantes (nome — senha — item)</h3>
+  <ul id="listParticipants" class="list"></ul>
+
+  <h3>Itens restantes</h3>
+  <ul id="listRemaining" class="list"></ul>
+
+  <div style="margin-top:12px">
+    <button id="btnRefresh" class="bigbtn">Atualizar (local)</button>
+    <button id="btnExport" class="bigbtn outline">Exportar CSV</button>
+  </div>
+  <p class="small">Observação: este painel mostra os registros <strong>neste aparelho</strong>. Para atualização entre aparelhos ative o Firebase (posso ajudar).</p>
+</div>
+
+<script>
+// fireworks (same)
+(function(){const c=document.getElementById('fw'); if(!c) return; const ctx=c.getContext('2d'); function resize(){c.width=innerWidth; c.height=innerHeight;} resize(); window.addEventListener('resize', resize); function boom(){const x=Math.random()*c.width,y=Math.random()*c.height*0.5; for(let i=0;i<18;i++){ setTimeout(function(){ ctx.beginPath(); ctx.arc(x+Math.cos(i*2*Math.PI/18)*(30+Math.random()*60), y+Math.sin(i*2*Math.PI/18)*(30+Math.random()*60), 3+Math.random()*3,0,Math.PI*2); ctx.fillStyle=['rgba(212,175,55,0.95)','rgba(255,140,0,0.9)','rgba(255,105,180,0.85)'][Math.floor(Math.random()*3)]; ctx.fill(); }, i*25);} } setInterval(boom,900); })();
+
+function refreshLocal(){
+  var parts = JSON.parse(localStorage.getItem('participants')||'[]');
+  var itens = JSON.parse(localStorage.getItem('itens_restantes')||'null') || ["Arroz (Janta 31/12)", "Arroz (Almoço 01/01)", "Feijão tropeiro (Janta 31/12)", "Feijoada (Almoço 01/01)", "Vinagrete e salada (Almoço 01/01)", "Vinagrete e salada (Janta 31/12)", "Escondidinho à gosto - 15 poções (Janta 31/12)", "Salpicão à gosto - 15 porções (Janta 31/12)", "Lasanha à gosto - 15 porções (Almoço 01/01)", "Strogonoff - 15 porções (Almoço 01/01)", "Pudim - 15 porções (pós janta 31/12)", "Bombom na travessa - 15 porções (pós janta 31/12)", "Pavê - 15 porções (pós almoço 01/01)", "Mousse de maracujá- 15 porções (pós almoço 01/01)", "Pão (contribuição em dinheiro 20,00)", "1 Café pó (servido pt manhã)", "1 Café pó (servido pt tarde)", "1L Leite (servido parte manhã)", "1L Leite (servido parte tarde)", "1 Margarina 250g", "1k Queijo", "15un Chimango (café da manhã)", "15un Pão de queijo (café da tarde)", "1 Bolo simples de padaria (café da manhã)", "1 Bolo simples de padaria (café da tarde)", "1L Suco (café da manhã)", "1L Suco (café da tarde)", "Chocolate em pó", "Bolo de tapioca - 15 porções (café da manhã)", "Cuscuz- 10 porções (café da manhã)", "Salada de frutas - 15 porções (café da tarde)", "A - Champanhe/ espumante sem álcool", "B - Champanhe/ espumante sem álcool"];
+  var lp = document.getElementById('listParticipants');
+  var lr = document.getElementById('listRemaining');
+  lp.innerHTML=''; lr.innerHTML='';
+  parts.forEach(function(p){ var li=document.createElement('li'); li.textContent = p.nome + ' — ' + p.senha + ' — ' + p.item; lp.appendChild(li); });
+  itens.forEach(function(i){ var li=document.createElement('li'); li.textContent = i; lr.appendChild(li); });
+}
+
+document.getElementById('btnRefresh').addEventListener('click', refreshLocal);
+
+document.getElementById('btnExport').addEventListener('click', function(){
+  var parts = JSON.parse(localStorage.getItem('participants')||'[]');
+  var csv = 'nome,senha,item,timestamp\n';
+  parts.forEach(function(p){ csv += '"' + p.nome.replace(/"/g,'""') + '","' + p.senha.replace(/"/g,'""') + '","' + p.item.replace(/"/g,'""') + '","' + p.ts + '"\n'; });
+  var blob = new Blob([csv], {type:'text/csv'}); var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = 'participantes_sorteio.csv'; a.click(); URL.revokeObjectURL(url);
+});
+
+window.addEventListener('load', refreshLocal);
+</script>
 </body>
 </html>
